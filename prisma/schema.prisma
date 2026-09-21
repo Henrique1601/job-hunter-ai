@@ -1,0 +1,114 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Seniority {
+  INTERN
+  JUNIOR
+  MID
+  SENIOR
+}
+
+enum WorkMode {
+  REMOTE
+  HYBRID
+  ONSITE
+}
+
+enum ApplicationStatus {
+  DISCOVERED
+  MATCHED
+  REVIEW_REQUIRED
+  READY
+  APPLIED
+  INTERVIEW
+  REJECTED
+  OFFER
+}
+
+model User {
+  id           String        @id @default(cuid())
+  email        String        @unique
+  name         String?
+  profile      Profile?
+  resumes      Resume[]
+  applications Application[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model Profile {
+  id             String      @id @default(cuid())
+  userId         String      @unique
+  headline       String?
+  bio            String?
+  targetRoles    String[]
+  skills         String[]
+  seniority      Seniority
+  workModes      WorkMode[]
+  locations      String[]
+  minimumSalary  Int?
+  user           User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+}
+
+model Resume {
+  id         String   @id @default(cuid())
+  userId     String
+  name       String
+  storageKey String
+  mimeType   String
+  isDefault  Boolean  @default(false)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Job {
+  id                  String        @id @default(cuid())
+  source              String
+  externalId          String
+  canonicalUrl        String
+  title               String
+  company             String
+  description         String
+  location            String
+  workMode             WorkMode
+  seniority           Seniority
+  salaryMin           Int?
+  salaryMax           Int?
+  requiredSkills      String[]
+  optionalSkills      String[]
+  requiresHumanReview Boolean       @default(true)
+  applications        Application[]
+  discoveredAt        DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+
+  @@unique([source, externalId])
+  @@unique([canonicalUrl])
+}
+
+model Application {
+  id             String            @id @default(cuid())
+  userId         String
+  jobId          String
+  resumeId       String?
+  status         ApplicationStatus @default(DISCOVERED)
+  matchScore     Int
+  matchStrengths String[]
+  matchGaps      String[]
+  appliedAt      DateTime?
+  user           User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  job            Job               @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  @@unique([userId, jobId])
+  @@index([userId, status])
+}
