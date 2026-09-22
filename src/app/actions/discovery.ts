@@ -2,8 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
-import { LiveJobFeedConnector } from "@/connectors/live-job-feed-connector";
-import { RemoteTechFeedConnector } from "@/connectors/remote-tech-feed-connector";
+import { getAllConnectors } from "@/connectors/registry";
 import { getCurrentUser } from "@/lib/auth";
 import { getPrismaClient } from "@/lib/prisma";
 import { PrismaApplicationRepository } from "@/repositories/prisma-application-repository";
@@ -28,10 +27,7 @@ export async function triggerDiscoveryAction(): Promise<DiscoveryActionResult> {
     const applicationRepository = new PrismaApplicationRepository(prisma);
     const profileRepository = new PrismaProfileRepository(prisma);
 
-    const connectors = [
-      new LiveJobFeedConnector(),
-      new RemoteTechFeedConnector(),
-    ];
+    const connectors = getAllConnectors();
 
     const discoveryService = new JobDiscoveryService({
       connectors,

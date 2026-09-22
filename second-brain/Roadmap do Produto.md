@@ -26,11 +26,18 @@
 ## Fase 3 — Descoberta
 
 - [x] primeiro conector para páginas públicas de carreira (`RemoteTechFeedConnector`);
-- [x] conector ao vivo para API pública de vagas remotas (`LiveJobFeedConnector`);
+- [x] conector ao vivo para API pública de vagas remotas (`LiveJobFeedConnector` - Remotive);
+- [x] conector Greenhouse Boards API pública para vagas de engenharia em big techs (`GreenhouseConnector`);
+- [x] conector Lever Postings API pública com extração de skills (`LeverConnector`);
+- [x] conector Gupy Portal público para ecossistema corporativo tech brasileiro (`GupyConnector`);
+- [x] conector GitHub Issues & repositórios open-source de vagas (`GitHubHnConnector`);
+- [x] conector LinkedIn Syndication Feed para posições de software (`LinkedInFeedConnector`);
+- [x] conector Indeed Syndication/RSS Feed para software e dados (`IndeedFeedConnector`);
+- [x] central de conectores com execução e resolução unificada (`src/connectors/registry.ts`);
 - [x] disparo manual de busca no Dashboard com feedback em tempo real (`DiscoveryTriggerButton`);
 - [x] rota de API protegida para agendamento periódico via Cron (`/api/cron/discovery`);
 - [x] serviço de descoberta com normalização e deduplicação (`JobDiscoveryService`);
-- [x] testes unitários de ingestão e idempotência.
+- [x] testes unitários de ingestão, conformidade de schema Zod e idempotência.
 
 ## Fase 4 — Inteligência aplicada
 
