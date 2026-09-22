@@ -6,3 +6,6 @@ coverage/
 *.log
 prisma/dev.db
 src/generated/prisma/
+
+.vercel
+.env*

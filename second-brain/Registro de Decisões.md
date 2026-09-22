@@ -30,4 +30,28 @@
 
 **Motivo:** arquitetura, domínio e roadmap evoluem na mesma revisão que a implementação.
 
+## ADR-006 — Neon como PostgreSQL gerenciado
+
+**Decisão:** usar conexão agrupada para a aplicação e conexão direta para migrations.
+
+**Motivo:** o tráfego da aplicação reutiliza conexões, enquanto operações de schema mantêm uma sessão direta e previsível.
+
+## ADR-007 — Server Actions para Mutações de Usuário e Candidaturas
+
+**Decisão:** operações de alteração de preferências de perfil e preparação de candidatura passam por Server Actions (`src/app/actions/`).
+
+**Motivo:** elimina rotas de API HTTP desnecessárias, simplifica o tratamento de formulários com `useActionState` e aciona `revalidatePath` automaticamente.
+
+## ADR-008 — Conectores Desacoplados de Descoberta
+
+**Decisão:** isolar fontes de vagas em classes que implementam a interface `JobDiscoveryConnector`, com ingestão centralizada em `JobDiscoveryService`.
+
+**Motivo:** permite plugar novos portais e APIs de emprego sem alterar o pipeline central ou a lógica do banco.
+
+## ADR-009 — Camada de Inteligência Híbrida com Gemini API
+
+**Decisão:** integrar o SDK oficial `@google/genai` com modelo `gemini-3.8-flash` para avaliação semântica e geração de cartas de apresentação, provendo fallback determinístico quando nenhuma chave estiver configurada.
+
+**Motivo:** enriquece a experiência do usuário com IA generativa sem quebrar o funcionamento offline ou de desenvolvimento básico.
+
 Relacionadas: [[Mapa da Arquitetura]] · [[Regras de Operação]] · [[Job Hunter AI Index]]

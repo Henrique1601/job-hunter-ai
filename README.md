@@ -13,10 +13,12 @@ Esta primeira entrega contém:
 - Job Matcher determinístico com score de 0 a 100;
 - política de candidatura que bloqueia duplicidades e respeita revisão humana;
 - modelo multiusuário em Prisma para perfil, currículo, vaga e candidatura;
+- banco Neon dedicado, com migration inicial e seed aplicados;
+- catálogo e detalhe de vagas lidos do PostgreSQL em tempo real;
 - contratos de repositories e validações Zod;
 - testes unitários das principais regras de negócio.
 
-Os dados da interface ainda são demonstrativos. A camada de persistência e o seed já estão preparados, mas dependem de uma instância PostgreSQL configurada. Autenticação e conectores de descoberta entram nas próximas etapas.
+O catálogo de vagas já usa dados persistidos no Neon. As demais métricas e páginas ainda combinam conteúdo demonstrativo com a fundação real do domínio. Autenticação e conectores de descoberta entram nas próximas etapas.
 
 ## Stack
 
@@ -47,11 +49,11 @@ npm run build
 
 ## Banco de dados
 
-Configure `DATABASE_URL` no arquivo `.env` e execute:
+Configure `DATABASE_URL` com a conexão agrupada e `DATABASE_URL_UNPOOLED` com a conexão direta no arquivo `.env`. Depois execute:
 
 ```bash
 npx prisma generate
-npx prisma migrate dev --name init
+npx prisma migrate deploy
 npm run db:seed
 ```
 
@@ -66,7 +68,7 @@ O banco usa uma chave única por usuário e vaga para impedir candidaturas dupli
 
 ## Próximas etapas
 
-1. conectar PostgreSQL e ligar os repositories Prisma à interface;
+1. ligar as métricas restantes do dashboard aos repositories Prisma;
 2. adicionar autenticação e upload real de currículos;
 3. criar o primeiro Job Discovery Connector para páginas de carreira;
 4. integrar um LLM para análise semântica complementar;

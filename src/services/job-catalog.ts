@@ -1,9 +1,8 @@
 import { decideApplicationState } from "@/domain/application-policy";
 import { matchJob } from "@/domain/job-matcher";
+import { getCurrentUser } from "@/lib/auth";
 import { getPrismaClient } from "@/lib/prisma";
 import type { DemoJob } from "@/data/demo";
-
-const demoUserEmail = "henrique@example.com";
 
 function companyMark(company: string) {
   return company
@@ -34,10 +33,13 @@ function workModeLabel(mode: "REMOTE" | "HYBRID" | "ONSITE") {
   ] as DemoJob["workMode"];
 }
 
-export async function listCatalogJobs(): Promise<DemoJob[]> {
+export async function listCatalogJobs(userEmail?: string): Promise<DemoJob[]> {
   const prisma = getPrismaClient();
+  const currentUser = await getCurrentUser();
+  const targetEmail = userEmail ?? currentUser.email;
+
   const user = await prisma.user.findUnique({
-    where: { email: demoUserEmail },
+    where: { email: targetEmail },
     include: { profile: true },
   });
 
@@ -100,7 +102,7 @@ export async function listCatalogJobs(): Promise<DemoJob[]> {
   });
 }
 
-export async function findCatalogJob(externalId: string) {
-  const jobs = await listCatalogJobs();
+export async function findCatalogJob(externalId: string, userEmail?: string) {
+  const jobs = await listCatalogJobs(userEmail);
   return jobs.find((job) => job.id === externalId) ?? null;
 }
