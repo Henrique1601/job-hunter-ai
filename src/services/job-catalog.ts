@@ -91,6 +91,7 @@ export async function listCatalogJobs(userEmail?: string): Promise<DemoJob[]> {
       score: match.score,
       postedAt: "salva no Neon",
       source: job.source,
+      canonicalUrl: job.canonicalUrl,
       status:
         existingApplication?.status ??
         (decision.status === "BLOCKED" ? "MATCHED" : decision.status),

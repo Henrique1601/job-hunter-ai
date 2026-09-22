@@ -11,6 +11,7 @@ export interface DemoJob {
   score: number;
   postedAt: string;
   source: string;
+  canonicalUrl: string;
   status: PipelineStatus;
   skills: string[];
   missingSkills: string[];
@@ -30,6 +31,7 @@ export const demoJobs: DemoJob[] = [
     score: 92,
     postedAt: "há 2 horas",
     source: "Página da empresa",
+    canonicalUrl: "https://example.com/jobs/nuvemshop-fullstack-jr",
     status: "READY",
     skills: ["TypeScript", "React", "Node.js", "PostgreSQL"],
     missingSkills: ["AWS"],
@@ -48,6 +50,7 @@ export const demoJobs: DemoJob[] = [
     score: 86,
     postedAt: "há 5 horas",
     source: "Gupy",
+    canonicalUrl: "https://example.com/jobs/quintoandar-frontend-i",
     status: "REVIEW_REQUIRED",
     skills: ["React", "TypeScript", "CSS", "Testes"],
     missingSkills: ["GraphQL"],
@@ -66,6 +69,7 @@ export const demoJobs: DemoJob[] = [
     score: 78,
     postedAt: "ontem",
     source: "LinkedIn",
+    canonicalUrl: "https://example.com/jobs/loft-backend-jr",
     status: "MATCHED",
     skills: ["Node.js", "PostgreSQL", "REST", "Docker"],
     missingSkills: ["Kafka"],
@@ -84,6 +88,7 @@ export const demoJobs: DemoJob[] = [
     score: 71,
     postedAt: "há 2 dias",
     source: "Indeed",
+    canonicalUrl: "https://example.com/jobs/contaazul-software-dev",
     status: "DISCOVERED",
     skills: ["JavaScript", "React", "SQL"],
     missingSkills: ["Java", "Spring"],

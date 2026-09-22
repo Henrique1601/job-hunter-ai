@@ -140,12 +140,12 @@ export default async function JobDetailPage({
           />
 
           <a
-            href={job.source.startsWith("http") ? job.source : "#"}
+            href={job.canonicalUrl}
             target="_blank"
             rel="noopener noreferrer"
             style={{ textDecoration: "none", width: "100%" }}
           >
-            <button className="secondary-button" style={{ width: "100%" }}>
+            <button type="button" className="secondary-button" style={{ width: "100%" }}>
               <ExternalLink size={15} /> Abrir vaga original
             </button>
           </a>
