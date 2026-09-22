@@ -47,13 +47,13 @@ export class JobDiscoveryService {
 
         const validJob = parsed.data;
 
-        const existingJob = await this.deps.jobRepository.findByCanonicalUrl(validJob.canonicalUrl);
-        if (!existingJob) {
-          await this.deps.jobRepository.save(validJob);
+        let persistedJob = await this.deps.jobRepository.findByCanonicalUrl(validJob.canonicalUrl);
+        if (!persistedJob) {
+          persistedJob = await this.deps.jobRepository.save(validJob);
           persistedCount++;
         }
 
-        if (userId && profile && this.deps.applicationRepository) {
+        if (userId && profile && this.deps.applicationRepository && persistedJob) {
           const match = matchJob(
             {
               targetRoles: profile.targetRoles,
@@ -78,7 +78,7 @@ export class JobDiscoveryService {
             const decision = await prepareApplication(
               {
                 userId,
-                jobId: validJob.canonicalUrl,
+                jobId: persistedJob.id,
                 matchScore: match.score,
                 requiresHumanReview: validJob.requiresHumanReview,
                 matchStrengths: match.strengths,

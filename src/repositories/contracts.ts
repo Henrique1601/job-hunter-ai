@@ -16,9 +16,13 @@ export interface ProfileRepository {
   save(userId: string, profile: ProfileInput): Promise<void>;
 }
 
+export interface JobRecord extends JobInput {
+  id: string;
+}
+
 export interface JobRepository {
-  findByCanonicalUrl(canonicalUrl: string): Promise<JobInput | null>;
-  save(job: JobInput): Promise<void>;
+  findByCanonicalUrl(canonicalUrl: string): Promise<JobRecord | null>;
+  save(job: JobInput): Promise<JobRecord>;
 }
 
 export interface ApplicationRepository {

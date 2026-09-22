@@ -49,9 +49,13 @@ export async function triggerDiscoveryAction(): Promise<DiscoveryActionResult> {
       0,
     );
 
-    revalidatePath("/");
-    revalidatePath("/vagas");
-    revalidatePath("/candidaturas");
+    try {
+      revalidatePath("/");
+      revalidatePath("/vagas");
+      revalidatePath("/candidaturas");
+    } catch {
+      // Ignora se estiver fora do contexto de requisição do Next.js
+    }
 
     return {
       success: true,

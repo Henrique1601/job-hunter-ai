@@ -4,6 +4,7 @@ import type { JobDiscoveryConnector } from "@/connectors/types";
 import type {
   ApplicationRecord,
   ApplicationRepository,
+  JobRecord,
   JobRepository,
   ProfileRepository,
 } from "@/repositories/contracts";
@@ -11,19 +12,21 @@ import type { JobInput, ProfileInput } from "@/lib/validation";
 import { JobDiscoveryService } from "./job-discovery-service";
 
 class InMemoryJobRepo implements JobRepository {
-  public jobs: JobInput[] = [];
+  public jobs: JobRecord[] = [];
 
-  async findByCanonicalUrl(canonicalUrl: string): Promise<JobInput | null> {
+  async findByCanonicalUrl(canonicalUrl: string): Promise<JobRecord | null> {
     return this.jobs.find((j) => j.canonicalUrl === canonicalUrl) ?? null;
   }
 
-  async save(job: JobInput): Promise<void> {
+  async save(job: JobInput): Promise<JobRecord> {
     const idx = this.jobs.findIndex((j) => j.canonicalUrl === job.canonicalUrl);
+    const record: JobRecord = { ...job, id: `job-${this.jobs.length + 1}` };
     if (idx >= 0) {
-      this.jobs[idx] = job;
+      this.jobs[idx] = record;
     } else {
-      this.jobs.push(job);
+      this.jobs.push(record);
     }
+    return record;
   }
 }
 
