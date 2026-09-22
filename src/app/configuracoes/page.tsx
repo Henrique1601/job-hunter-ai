@@ -1,3 +1,33 @@
-export default function SettingsPage() {
-  return <div><section className="page-heading simple-heading"><div><p className="eyebrow">Configurações</p><h1>Ritmo e limites<br /><em>do seu agente.</em></h1><p className="heading-copy">Controle a frequência das buscas e onde a automação deve parar.</p></div></section><div className="form-card"><div className="setting-row"><div><strong>Busca automática</strong><p>Executar o radar duas vezes ao dia.</p></div><button className="toggle" aria-label="Busca automática ativada"><i /></button></div><div className="setting-row"><div><strong>Sempre revisar antes do envio</strong><p>Nenhuma candidatura será enviada sem confirmação.</p></div><button className="toggle active" aria-label="Revisão manual ativada"><i /></button></div></div></div>;
+import { SettingsForm } from "./settings-form";
+import { getCurrentUser } from "@/lib/auth";
+import { getPrismaClient } from "@/lib/prisma";
+
+export const dynamic = "force-dynamic";
+
+export default async function SettingsPage() {
+  const user = await getCurrentUser();
+  const prisma = getPrismaClient();
+
+  const settings = await prisma.userSettings.findUnique({
+    where: { userId: user.id },
+  });
+
+  return (
+    <div>
+      <section className="page-heading simple-heading">
+        <div>
+          <p className="eyebrow">Configurações</p>
+          <h1>
+            Ritmo e limites<br />
+            <em>do seu agente.</em>
+          </h1>
+          <p className="heading-copy">
+            Ajuste a frequência de busca, determine a nota de corte para candidaturas automáticas e configure alertas em tempo real.
+          </p>
+        </div>
+      </section>
+
+      <SettingsForm initialSettings={settings} />
+    </div>
+  );
 }

@@ -7,6 +7,8 @@ import { getCurrentUser } from "@/lib/auth";
 import { getPrismaClient } from "@/lib/prisma";
 import { PrismaApplicationRepository } from "@/repositories/prisma-application-repository";
 import { prepareApplication } from "@/services/prepare-application";
+import { sendWebhookNotification } from "@/services/notification-service";
+import type { ApplicationStatus } from "@/generated/prisma/enums";
 
 export interface PrepareApplicationActionResult {
   success: boolean;
@@ -106,6 +108,87 @@ export async function prepareApplicationAction(
         error instanceof Error
           ? error.message
           : "Erro ao preparar candidatura.",
+    };
+  }
+}
+
+export async function updateApplicationStatusAction(
+  applicationId: string,
+  newStatus: ApplicationStatus,
+): Promise<{ success: boolean; message: string }> {
+  try {
+    const user = await getCurrentUser();
+    const prisma = getPrismaClient();
+
+    const application = await prisma.application.findFirst({
+      where: { id: applicationId, userId: user.id },
+    });
+
+    if (!application) {
+      return { success: false, message: "Candidatura não encontrada." };
+    }
+
+    await prisma.application.update({
+      where: { id: applicationId },
+      data: {
+        status: newStatus,
+        appliedAt: newStatus === "APPLIED" ? new Date() : application.appliedAt,
+      },
+    });
+
+    if (newStatus === "INTERVIEW") {
+      const settings = await prisma.userSettings.findUnique({ where: { userId: user.id } });
+      if (settings?.webhookUrl) {
+        const job = await prisma.job.findUnique({ where: { id: application.jobId } });
+        sendWebhookNotification(settings.webhookUrl, {
+          title: "🎉 Candidatura Avançou para Entrevista!",
+          description: `Parabéns! Sua candidatura para ${job?.title ?? "Vaga"} na ${job?.company ?? "Empresa"} avançou para a fase de Entrevista.`,
+          score: application.matchScore,
+        }).catch(() => {});
+      }
+    }
+
+    revalidatePath("/candidaturas");
+    revalidatePath("/");
+    revalidatePath("/vagas");
+
+    return { success: true, message: `Status atualizado para ${newStatus} com sucesso!` };
+  } catch (error) {
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : "Erro ao atualizar status.",
+    };
+  }
+}
+
+export async function deleteApplicationAction(
+  applicationId: string,
+): Promise<{ success: boolean; message: string }> {
+  try {
+    const user = await getCurrentUser();
+    const prisma = getPrismaClient();
+
+    const application = await prisma.application.findFirst({
+      where: { id: applicationId, userId: user.id },
+    });
+
+    if (!application) {
+      return { success: false, message: "Candidatura não encontrada." };
+    }
+
+    await prisma.application.delete({
+      where: { id: applicationId },
+    });
+
+    revalidatePath("/candidaturas");
+    revalidatePath("/");
+    revalidatePath("/vagas");
+
+    return { success: true, message: "Candidatura removida do pipeline." };
+  } catch (error) {
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : "Erro ao remover candidatura.",
     };
   }
 }

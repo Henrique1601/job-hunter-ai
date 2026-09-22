@@ -16,18 +16,21 @@
 
 - [x] camada de resolução de identidade / autenticação multiusuário (`src/lib/auth.ts`);
 - [x] CRUD do perfil profissional via Server Actions (`src/app/actions/profile.ts` e `ProfileForm`);
-- [ ] upload privado de currículos (Storage S3/R2/Vercel Blob);
+- [x] upload e biblioteca de currículos com metadados no Neon (`src/app/curriculos/resume-library.tsx`);
+- [x] extração de competências do currículo com IA Gemini para auto-preenchimento de perfil;
+- [x] modelo `UserSettings` persistido no Neon para controle de filtros e automação;
 - [x] repositories Prisma;
 - [x] seed de desenvolvimento;
-- [x] configurar um banco PostgreSQL acessível no Neon.
+- [x] banco PostgreSQL configurado no Neon.
 
 ## Fase 3 — Descoberta
 
 - [x] primeiro conector para páginas públicas de carreira (`RemoteTechFeedConnector`);
+- [x] conector ao vivo para API pública de vagas remotas (`LiveJobFeedConnector`);
+- [x] disparo manual de busca no Dashboard com feedback em tempo real (`DiscoveryTriggerButton`);
+- [x] rota de API protegida para agendamento periódico via Cron (`/api/cron/discovery`);
 - [x] serviço de descoberta com normalização e deduplicação (`JobDiscoveryService`);
-- [x] testes unitários de ingestão e idempotência;
-- [ ] execução programada com fila / workers;
-- [ ] observabilidade e retentativas automáticas.
+- [x] testes unitários de ingestão e idempotência.
 
 ## Fase 4 — Inteligência aplicada
 
@@ -41,9 +44,10 @@
 
 - [x] botão interativo de preparação de candidatura com Server Actions (`ApplyButton`);
 - [x] bloqueio de duplicidades e parada em `REVIEW_REQUIRED`;
-- [x] quadro Kanban dinâmico por etapas do pipeline;
+- [x] quadro Kanban dinâmico com movimentação rápida entre status e exclusão;
+- [x] serviço de alertas em tempo real via Webhook (Discord/Telegram) para matches fortes e entrevistas;
 - [ ] integração com Gmail para leitura automática de retornos;
 - [ ] conectores de candidatura permitidos;
-- [ ] métricas de conversão por origem.
+- [ ] métricas avançadas de conversão por origem.
 
 Relacionadas: [[Visão do Produto]] · [[Playbook de Integrações]] · [[Registro de Decisões]] · [[Mapa da Arquitetura]]

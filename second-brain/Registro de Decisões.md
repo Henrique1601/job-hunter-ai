@@ -54,4 +54,16 @@
 
 **Motivo:** enriquece a experiência do usuário com IA generativa sem quebrar o funcionamento offline ou de desenvolvimento básico.
 
+## ADR-010 — Extração de Competências de Currículos via Gemini
+
+**Decisão:** permitir que o usuário faça upload de currículos e dispare a extração estruturada de competências com o Gemini para auto-preenchimento do perfil.
+
+**Motivo:** reduz a fricção de onboarding do usuário de digitar manualmente suas skills, garantindo alinhamento imediato com as vagas do radar.
+
+## ADR-011 — Notificações em Tempo Real por Webhook
+
+**Decisão:** disponibilizar canal de saída assíncrono via Webhooks (compatível com Discord, Telegram e Slack) para alertar sobre matches de pontuação alta e candidaturas em fase de entrevista.
+
+**Motivo:** mantém o usuário informado no momento exato em que novas oportunidades são detectadas pelo radar ou quando um processo seletivo avança.
+
 Relacionadas: [[Mapa da Arquitetura]] · [[Regras de Operação]] · [[Job Hunter AI Index]]

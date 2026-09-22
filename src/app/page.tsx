@@ -1,6 +1,7 @@
-import { ArrowUpRight, Bot, Clock3, Radar, Sparkles } from "lucide-react";
+import { ArrowUpRight, Bot, Clock3, Sparkles } from "lucide-react";
 import Link from "next/link";
 
+import { DiscoveryTriggerButton } from "@/components/discovery-trigger-button";
 import { ScoreRing } from "@/components/score-ring";
 import { getDashboardMetrics } from "@/services/dashboard-metrics";
 import { listCatalogJobs } from "@/services/job-catalog";
@@ -60,11 +61,7 @@ export default async function DashboardPage() {
             <small>Próxima varredura</small>
             <strong>Hoje, 18:30</strong>
           </div>
-          <Link href="/vagas" style={{ textDecoration: "none" }}>
-            <button aria-label="Executar busca agora" style={{ width: "100%" }}>
-              <Radar size={17} /> Ver oportunidades
-            </button>
-          </Link>
+          <DiscoveryTriggerButton />
         </div>
       </section>
 

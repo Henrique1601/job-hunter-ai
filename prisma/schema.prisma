@@ -36,6 +36,7 @@ model User {
   email        String        @unique
   name         String?
   profile      Profile?
+  settings     UserSettings?
   resumes      Resume[]
   applications Application[]
   createdAt    DateTime      @default(now())
@@ -111,4 +112,16 @@ model Application {
 
   @@unique([userId, jobId])
   @@index([userId, status])
+}
+
+model UserSettings {
+  id                 String   @id @default(cuid())
+  userId             String   @unique
+  autoDiscovery      Boolean  @default(true)
+  requireHumanReview Boolean  @default(true)
+  minMatchScore      Int      @default(75)
+  webhookUrl         String?
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 }
